@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 40px;
+        }
+
+        .autocomplete-suggestions {
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: white;
+            position: absolute;
+            width: calc(100% - 20px);
+            z-index: 1000;
+        }
+
+        .autocomplete-suggestion {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .autocomplete-suggestion:hover {
+                background-color: #e9ecef;
+            }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .tab-pane {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container m-2 p-2">
+        <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-home" type="button">नेपालभाषा</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button">प्राकृतिक सब्दकोश</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button">लेख संग्रह</button>
+            </li>
+        </ul>
+
+        <div class="tab-content border-light-silver" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Search</div>
+                            <div class="card-body">
+                                <input type="text" class="form-control" id="userInput" placeholder="Type your text here..." />
+                                <button class="btn btn-primary mt-2" id="translateButton">Submit</button>
+                                <div class="mt-3" id="translationOutput">Translation Here</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">सम्बन्धित जानकारीहरु</div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <tr><th><a href="#">स्वयम्भु अवस्थित हारती अजिमाको कथा</a></th></tr>
+                                    <tr><td>स्वयम्भू महाचैत्यको उतर-पश्चिम...</td></tr>
+                                    <tr><th><a href="#">हारती अजिमाको पुजा बिधि</a></th></tr>
+                                    <tr><td>स्वयम्भु पुराणमा उल्लेख अनुसार...</td></tr>
+                                    <tr><th><a href="#">हारती अजिमाया राग म्ये</a></th></tr>
+                                    <tr><td>श्री हारती मांया मे सफू...</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-profile">
+                <table class="table table-sm">
+                    <tr>
+                        <th>प्राकृतिक सब्द</th>
+                        <th>मौलिक सब्द</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" placeholder="Natural Word"></td>
+                        <td><input type="text" class="form-control" placeholder="Meaningful Word"></td>
+                        <td><button class="btn btn-primary">Submit</button></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="pills-contact">लेख संग्रह सामग्री</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const translations = {
+            "jigu": "जिगु ",
+            "ji": "जी ",
+            "chu": "छु",
+            "chhu": "छु",
+            "xu": "छु",
+            "naa": "ना ",
+            "khaa": "ख  ",
+            "yomari": "यमरी",
+            "ya:mari": "यमरी",
+            "yamari": "यमरी",
+            "jaa": "जा ",
+            "ne": "ने ",
+            "makhu": "मखु"
+        };
+
+        function translateText() {
+            const input = document.getElementById("userInput").value.trim().toLowerCase();
+            const translationOutput = document.getElementById("translationOutput");
+
+            if (!input) {
+                translationOutput.textContent = "Please enter text";
+                return;
+            }
+
+            const words = input.split(" ");
+            const translatedWords = words.map(word => translations[word] || "[No translation]");
+
+            // Join all the translated words into a sentence and update the output
+            translationOutput.textContent = translatedWords.join(" ");
+        }
+
+        document.getElementById("translateButton").addEventListener("click", translateText);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputField = document.getElementById("userInput");
+            inputField.addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {
+                    translateText();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
